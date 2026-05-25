@@ -42,9 +42,9 @@ builder.Services.AddSwaggerGen();
 // 4. CORS Politikasi
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowViteDevServer", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -60,7 +60,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-app.UseCors("AllowViteDevServer");
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 
