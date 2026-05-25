@@ -29,5 +29,5 @@ jobs:
 
           # 3. Eski veritabanı kalıntılarını sil (-v) ve sistemi ayağa kaldır
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose down -v
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose build
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --force-recreate
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose build --no-cache
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --force-recreate --no-cache
