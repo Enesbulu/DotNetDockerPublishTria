@@ -24,4 +24,5 @@ jobs:
           
           # 2. Sudo komutlarını SSH oturumundaki şifre ile besleyerek çalıştır
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose down
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --build --no-cache
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose build --no-cache
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --force-recreate
