@@ -2,7 +2,7 @@ name: Sandbox CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ] # Sen kendi bilgisayarından main branch'ine push attığında çalışır
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -17,7 +17,11 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd ~/DotNetDockerPublishTria
-          git checkout main
-          git pull origin main
-          sudo docker compose down
-          sudo docker compose up -d --build
+          
+          # 1. Sunucudaki Git geçmişini temizle ve main branch'ine zorla eşitle
+          git fetch origin main
+          git reset --hard origin/main
+          
+          # 2. Sudo komutlarını SSH oturumundaki şifre ile besleyerek çalıştır
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose down
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --build
