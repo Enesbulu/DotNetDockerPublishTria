@@ -32,6 +32,6 @@ jobs:
           echo "DB_CONNECTION_STRING=Host=db;Port=5432;Database=todosdb;Username=postgres;Password=${{ secrets.DB_PASSWORD }}" >> .env
           
           # 4. Eski veritabanı kalıntılarını sil (-v) ve sistemi ayağa kaldır
-          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose down -v
+          echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose down 
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose build --no-cache
           echo "${{ secrets.SSH_PASSWORD }}" | sudo -S docker compose up -d --force-recreate

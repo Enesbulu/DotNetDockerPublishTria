@@ -64,18 +64,25 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
 
-// 6. Otomatik EF Core Migration
+// 6. Otomatik EF Core Migration (Kurşungeçirmez Retry Mekanizması)
 using (var scope = app.Services.CreateScope())
 {
-    try
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    int maxRetry = 10; // Toplam 30 saniye boyunca deneyecek
+    
+    for (int i = 0; i < maxRetry; i++)
     {
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        db.Database.Migrate();
-        Console.WriteLine("Veritabanı migrasyonları başarıyla uygulandı.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Veritabanı migrasyon hatası: {ex.Message}");
+        try
+        {
+            db.Database.Migrate();
+            Console.WriteLine("✅ Veritabanı migrasyonları başarıyla uygulandı ve tablolar çizildi.");
+            break; // Başarılı olursa döngüyü kır ve uygulamayı başlat
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⏳ Veritabanı henüz hazır değil, bekleniyor... (Deneme {i + 1}/{maxRetry})");
+            System.Threading.Thread.Sleep(3000); // 3 saniye bekle ve tekrar dene
+        }
     }
 }
 
